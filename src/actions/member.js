@@ -5,6 +5,10 @@ import { Firebase, FirebaseRef } from '../lib/firebase';
 /**
   * Sign Up to Firebase
   */
+
+
+
+
 export function signUp(formData) {
   const {
     email,
@@ -206,6 +210,23 @@ export function updateProfile(formData) {
         resolve();
       }).catch(reject);
   }).catch(async (err) => { await statusMessage(dispatch, 'error', err.message); throw err.message; });
+}
+/**
+  * Buy Credits
+  */
+
+export function buyCredits({numCredits}) {
+
+  return dispatch => new Promise(async (resolve, reject) => {
+
+    statusMessage(dispatch, 'success', 'Credits Added');
+    const UID = Firebase.auth().currentUser.uid;
+
+    console.log('ueid', FirebaseRef.child(`users/${UID}`))
+    const amount = 1; 
+    
+    return FirebaseRef.child(`users/${UID}`).update({credits: 2})
+  })
 }
 
 /**

@@ -5,9 +5,8 @@ import { Icon } from 'native-base';
 import DefaultProps from '../constants/navigation';
 import AppConfig from '../../constants/config';
 
-import RecipesContainer from '../../containers/Recipes';
-import RecipesComponent from '../components/Recipes';
-import RecipeViewComponent from '../components/Recipe';
+import GamesContainer from '../../containers/Games';
+import GamesView from '../components/Games';
 
 import SignUpContainer from '../../containers/SignUp';
 import SignUpComponent from '../components/SignUp';
@@ -39,10 +38,10 @@ const Index = (
         <Stack
           key="games"
           title="Games"
-          icon={() => <Icon name="book" {...DefaultProps.icons} />}
+          icon={() => <Icon name="basketball" {...DefaultProps.icons} />}
           {...DefaultProps.navbarProps}
         >
-          <Scene key="recipes" component={RecipesContainer} Layout={RecipesComponent} />
+          <Scene key="recipes" component={GamesContainer} Layout={GamesView} />
         </Stack>
 
         <Stack
@@ -87,16 +86,6 @@ const Index = (
         </Stack>
       </Tabs>
     </Scene>
-
-    <Scene
-      back
-      clone
-      key="recipe"
-      title="RECIPE"
-      {...DefaultProps.navbarProps}
-      component={RecipesContainer}
-      Layout={RecipeViewComponent}
-    />
   </Stack>
 );
 

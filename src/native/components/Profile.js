@@ -4,18 +4,24 @@ import { View } from 'react-native';
 import { Container, Content, List, ListItem, Body, Left, Text, Icon } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import Header from './Header';
+import Spacer from './Spacer';
+import ProfilePicture from './ProfilePicture';
 
-const Profile = ({ member, logout }) => (
+const Profile = ({ member, logout, buy }) => (
   <Container>
     <Content>
       <List>
         {(member && member.email) ?
           <View>
             <Content padder>
+              <ProfilePicture />
               <Header
                 title={`Hi ${member.firstName},`}
                 content={`You are currently logged in as ${member.email}`}
               />
+              <View>
+                <Text>You have {member.credits} credits</Text>
+              </View>
             </Content>
 
             <ListItem onPress={Actions.updateProfile} icon>
@@ -24,6 +30,14 @@ const Profile = ({ member, logout }) => (
               </Left>
               <Body>
                 <Text>Update My Profile</Text>
+              </Body>
+            </ListItem>
+            <ListItem onPress={buy} icon>
+              <Left>
+                <Icon name="add" />
+              </Left>
+              <Body>
+                <Text>Buy Credits</Text>
               </Body>
             </ListItem>
             <ListItem onPress={logout} icon>
@@ -78,6 +92,7 @@ const Profile = ({ member, logout }) => (
 Profile.propTypes = {
   member: PropTypes.shape({}),
   logout: PropTypes.func.isRequired,
+  buy: PropTypes.func,
 };
 
 Profile.defaultProps = {
