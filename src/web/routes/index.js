@@ -8,9 +8,8 @@ import TemplateSidebar from '../components/TemplateSidebar';
 // Routes
 import Home from '../components/Home';
 
-import RecipesContainer from '../../containers/Recipes';
-import RecipesComponent from '../components/Recipes';
-import RecipeViewComponent from '../components/Recipe';
+import GamesContainer from '../../containers/Games';
+import GamesView from '../components/Games';
 
 import SignUpContainer from '../../containers/SignUp';
 import SignUpComponent from '../components/SignUp';
@@ -73,15 +72,7 @@ const Index = () => (
       path="/recipes"
       render={props => (
         <TemplateSidebar>
-          <RecipesContainer {...props} Layout={RecipesComponent} />
-        </TemplateSidebar>
-      )}
-    />
-    <Route
-      path="/recipe/:id"
-      render={props => (
-        <TemplateSidebar>
-          <RecipesContainer {...props} Layout={RecipeViewComponent} />
+          <GamesContainer {...props} Layout={GamesContainer} />
         </TemplateSidebar>
       )}
     />

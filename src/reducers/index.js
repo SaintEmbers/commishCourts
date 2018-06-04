@@ -1,6 +1,6 @@
 import status from './status';
 import member from './member';
-// import recipes from './recipes';
+import games  from './games';
 
 const rehydrated = (state = false, action) => {
   switch (action.type) {
@@ -15,5 +15,5 @@ export default {
   rehydrated,
   status,
   member,
-  // recipes,
+  games,
 };

@@ -2,47 +2,23 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-// import { getRecipes, getMeals, setError } from '../actions/recipes';
+import { getGames } from '../actions/games';
 
 class GamesContainer extends Component {
-  // static propTypes = {
-  //   Layout: PropTypes.func.isRequired,
-  //   recipes: PropTypes.shape({
-  //     loading: PropTypes.bool.isRequired,
-  //     error: PropTypes.string,
-  //     recipes: PropTypes.arrayOf(PropTypes.shape()).isRequired,
-  //   }).isRequired,
-  //   match: PropTypes.shape({
-  //     params: PropTypes.shape({}),
-  //   }),
-  //   getRecipes: PropTypes.func.isRequired,
-  //   getMeals: PropTypes.func.isRequired,
-  //   setError: PropTypes.func.isRequired,
-  // }
+  static propTypes = {
+    Layout: PropTypes.func.isRequired,
+    games: PropTypes.object,
+    getGames: PropTypes.func,
+  }
 
-  // static defaultProps = {
-  //   match: null,
-  // }
 
-  // componentDidMount = () => this.fetchRecipes();
-
-  
-  //   Fetch Data from API, saving to Redux
-    
-//   fetchRecipes = () => {
-//     return this.props.getRecipes()
-//       .then(() => this.props.getMeals())
-//       .catch((err) => {
-//         console.log(`Error: ${err}`);
-//         return this.props.setError(err);
-//       });
-//   }
+  componentDidMount = () => this.props.getGames();
 
   render = () => {
-    const { Layout } = this.props;
+    const { Layout, games } = this.props;
 
     return (
-      <Layout/>
+      <Layout game={games}/>
     );
   }
 }
@@ -52,7 +28,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  // getRecipes,
+  getGames,
   // getMeals,
   // setError,
 };

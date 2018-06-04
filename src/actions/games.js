@@ -1,25 +1,28 @@
-//import { Firebase, FirebaseRef } from '../lib/firebase';
+import { Firebase, FirebaseRef } from '../lib/firebase';
 
 /**
   * Get this User's Favourite Recipes
   */
-//export function getFavourites(dispatch) {
-//  if (Firebase === null) return () => new Promise(resolve => resolve());
+export function getGames() {
+ if (Firebase === null) return () => new Promise(resolve => resolve());
 
   // const UID = Firebase.auth().currentUser.uid;
   // if (!UID) return false;
+  // console.log('dispatch', dispatch)
 
-//   const ref = FirebaseRef.child(`favourites/${UID}`);
+  const ref = FirebaseRef.child(`games`);
+  return(dispatch) => {
+    return ref.on('value', (snapshot) => {
+      const games = snapshot.val() || {};
+      console.log('games', games)
+      return dispatch({
+        type: 'GAMES_REPLACE',
+        games,
+      });
+    });
 
-//   return ref.on('value', (snapshot) => {
-//     const favs = snapshot.val() || [];
-
-//     return dispatch({
-//       type: 'FAVOURITES_REPLACE',
-//       data: favs,
-//     });
-//   });
-// }
+  }
+}
 
 /**
   * Reset a User's Favourite Recipes in Redux (eg for logou)

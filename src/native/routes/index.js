@@ -41,7 +41,7 @@ const Index = (
           icon={() => <Icon name="basketball" {...DefaultProps.icons} />}
           {...DefaultProps.navbarProps}
         >
-          <Scene key="recipes" component={GamesContainer} Layout={GamesView} />
+          <Scene key="games" component={GamesContainer} Layout={GamesView} />
         </Stack>
 
         <Stack
