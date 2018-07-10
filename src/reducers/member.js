@@ -27,6 +27,7 @@ export default function userReducer(state = initialState, action) {
           lastName: action.data.lastName,
           signedUp: action.data.signedUp,
           role: action.data.role,
+          isCommish: action.data.isCommish,
         };
       }
       return initialState;

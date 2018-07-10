@@ -6,7 +6,10 @@ import DefaultProps from '../constants/navigation';
 import AppConfig from '../../constants/config';
 
 import GamesContainer from '../../containers/Games';
-import GamesView from '../components/Games';
+import GameCreatorContainer from '../../containers/GameCreator';
+
+import GameCard from '../components/GameCard';
+import GameCreatorForm from '../components/GameCreatorForm';
 
 import SignUpContainer from '../../containers/SignUp';
 import SignUpComponent from '../components/SignUp';
@@ -41,9 +44,9 @@ const Index = (
           icon={() => <Icon name="basketball" {...DefaultProps.icons} />}
           {...DefaultProps.navbarProps}
         >
-          <Scene key="games" component={GamesContainer} Layout={GamesView} />
+          <Scene key="games" component={GamesContainer} Layout={GameCard} />
+          <Scene key="gameCreator" component={GameCreatorContainer} Layout={GameCreatorForm} />
         </Stack>
-
         <Stack
           key="profile"
           title="PROFILE"

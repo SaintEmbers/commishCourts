@@ -6,9 +6,6 @@ import { Firebase, FirebaseRef } from '../lib/firebase';
   * Sign Up to Firebase
   */
 
-
-
-
 export function signUp(formData) {
   const {
     email,
