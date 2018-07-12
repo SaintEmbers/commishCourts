@@ -11,7 +11,7 @@ class SignUp extends React.Component {
   static propTypes = {
     error: PropTypes.string,
     loading: PropTypes.bool.isRequired,
-    onFormSubmit: PropTypes.func.isRequired,
+    signUp: PropTypes.func.isRequired,
   }
 
   static defaultProps = {
@@ -40,9 +40,12 @@ class SignUp extends React.Component {
   }
 
   handleSubmit = () => {
-    this.props.onFormSubmit(this.state)
-      .then(() => Actions.login())
-      .catch(e => console.log(`Error: ${e}`));
+    this.props.signUp(this.state)
+      .then(() => {
+        this.props.login({email: this.state.email, password: this.state.password})
+      }).then(() => Actions.)
+      // .then(() => Actions.login())
+      // .catch(e => console.log(`Error: ${e}`));
   }
 
   render() {

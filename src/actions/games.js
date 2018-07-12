@@ -1,9 +1,6 @@
 import moment from 'moment';
 import { Firebase, FirebaseRef } from '../lib/firebase';
 
-/**
-  * Get this User's Favourite Recipes
-  */
 export function getGames() {
  if (Firebase === null) return () => new Promise(resolve => resolve());
 
@@ -29,6 +26,17 @@ export function createGame({location, day, time}) {
   }
 }
 
-export function joinGame(){
-  console.log('join game')
+export function joinGame({id, playerId, player}){
+  const UID = Firebase.auth().currentUser.uid
+  
+  //remove from game list
+  return FirebaseRef.child(`games/${id}/player-list/${UID}`).remove().then(() => {
+    console.log('player removed')
+  });
+
+  //rsvp to game list
+  // return FirebaseRef.child(`games/${id}/player-list`).update({[UID]: player}).then(() => {
+  //   console.log('player removed')
+  // });
+
 }

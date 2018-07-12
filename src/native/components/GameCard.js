@@ -2,28 +2,32 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import { Text, H1 } from 'native-base';
+import { Text, H1, Icon } from 'native-base';
 import Spacer from './Spacer';
 
-const GameCard = ({details, joinGame}) => (
-  <View style={styles.card}>
-    <TouchableOpacity onPress={joinGame}>
+const GameCard = (props) => {
+  console.log('props', props.game)
+  const {joinGame, details, game} = props;
+  return(
+    <View style={styles.card}>
       <View>
         <Text style={styles.text}>{details.day}</Text>
       </View>
-    </TouchableOpacity>
-    <TouchableOpacity onPress={joinGame}>
       <View>
         <Text style={styles.text}>{details.location}</Text>
       </View>
-    </TouchableOpacity>
-    <TouchableOpacity onPress={joinGame}>
       <View>
         <Text style={styles.text}>{details.time}</Text>
       </View>
-    </TouchableOpacity>
-  </View>
-);
+      <TouchableOpacity onPress={joinGame.bind(null, game)}>
+        <View>
+          <Icon name="add-circle" style={styles.icon}></Icon>
+        </View>
+      </TouchableOpacity>
+    </View>
+
+  )
+};
 
 
 const styles = StyleSheet.create({
@@ -43,6 +47,10 @@ const styles = StyleSheet.create({
   color: 'white',
   fontWeight: '100',
   fontSize: 23,
+ }, 
+ icon: {
+  color: '#a0d6b4',
+  fontSize: 30,
  } 
 })
 

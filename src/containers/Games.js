@@ -27,9 +27,11 @@ class GamesContainer extends Component {
     Actions.gameCreator();
   }
 
-  joinGame(){
-    console.log('join game')
-    Actions.joinGame()
+  joinGame(id){
+    const {userData} = this.props;
+    console.log('userData id', userData.firstName)
+    const player = `${userData.firstName}-${userData.lastName}`
+    this.props.joinGame({id, userId: userData.uid, player });
   }
 
   render = () => {
@@ -61,4 +63,4 @@ const mapStateToProps = state => ({
 });
 
 export {GamesContainer};
-export default connect(mapStateToProps, {getGames, getMemberData})(GamesContainer);
+export default connect(mapStateToProps, {getGames, getMemberData, joinGame})(GamesContainer);
