@@ -3,9 +3,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { logout, getMemberData, buyCredits, registerForPushNotifications } from '../actions/member';
+import { logout, getMemberData, buyCredits } from '../actions/member';
 
-class Member extends Component {
+class EvalFormContainer extends Component {
   static propTypes = {
     Layout: PropTypes.func.isRequired,
     memberLogout: PropTypes.func.isRequired,
@@ -17,10 +17,8 @@ class Member extends Component {
     }).isRequired,
   }
 
-  componentWillMount(){
-    this.props.getMemberData();
-    // this.props.registerForPushNotifications();
-  }
+  componentDidMount = () => this.props.getMemberData();
+
   render = () => {
     const { Layout, member, memberLogout, buyCredits } = this.props;
 
@@ -36,7 +34,6 @@ const mapDispatchToProps = {
   memberLogout: logout,
   getMemberData,
   buyCredits,
-  registerForPushNotifications,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Member);
+export default connect(mapStateToProps, mapDispatchToProps)(EvalFormContainer);

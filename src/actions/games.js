@@ -3,7 +3,6 @@ import { Firebase, FirebaseRef } from '../lib/firebase';
 
 export function getGames() {
  if (Firebase === null) return () => new Promise(resolve => resolve());
-
   const ref = FirebaseRef.child(`games`);
   return(dispatch) => {
     return ref.on('value', (snapshot) => {
@@ -26,17 +25,54 @@ export function createGame({location, day, time}) {
   }
 }
 
-export function joinGame({id, playerId, player}){
-  const UID = Firebase.auth().currentUser.uid
-  
-  //remove from game list
-  return FirebaseRef.child(`games/${id}/player-list/${UID}`).remove().then(() => {
-    console.log('player removed')
+export function joinGame({gameId, playerId, player}){
+  const UID = Firebase.auth().currentUser.uid;
+  return async(dispatch) => {
+    const hasJoined = await checkIfJoinedGame({userId: UID, gameId});
+    if(hasJoined){
+      return FirebaseRef.child(`games/${gameId}/player-list/${UID}`).remove().then(() => {
+        return dispatch({
+          type: 'GAME_UNRESERVED',
+          gameId,
+        })
+      }).then(() => {
+        return FirebaseRef.child(`users/${UID}/games/${gameId}`).remove().then(() => {
+          return getReservedGames({id: UID});
+        })
+      });
+    }
+
+    return  FirebaseRef.child(`games/${gameId}/player-list`).update({[UID]: player}).then(() => {
+      return dispatch({
+        type: 'GAME_RESERVED',
+        gameId,
+      })
+    }).then(() => {
+        return FirebaseRef.child(`users/${UID}/games`).update({[gameId]: true}).then(() => {
+          return getReservedGames({id: UID});
+        })
+      });
+  }
+}
+
+
+function checkIfJoinedGame({userId, gameId}){
+  let snap;
+  FirebaseRef.child(`games/${gameId}/player-list/${userId}`).once('value', (snapshot) => {
+    snap = snapshot.val();
   });
+  return snap !== null;
+}
 
-  //rsvp to game list
-  // return FirebaseRef.child(`games/${id}/player-list`).update({[UID]: player}).then(() => {
-  //   console.log('player removed')
-  // });
-
+export function getReservedGames({id}){
+ if (Firebase === null) return () => new Promise(resolve => resolve());
+  return async(dispatch) => {
+    return FirebaseRef.child(`users/${id}/games/`).once('value', (snapshot) => {
+      const games = snapshot.val();
+      return dispatch({
+        type: 'USER_GAMES',
+        userGames: games
+      })
+    });
+  }
 }

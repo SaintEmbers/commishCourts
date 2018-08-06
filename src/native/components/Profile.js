@@ -40,6 +40,14 @@ const Profile = ({ member, logout, buy }) => (
                 <Text>Buy Credits</Text>
               </Body>
             </ListItem>
+              <ListItem onPress={Actions.commishBible} icon>
+              <Left>
+                <Icon name="compass" />
+              </Left>
+              <Body>
+                <Text>Commish Courts Bible</Text>
+              </Body>
+            </ListItem>
             <ListItem onPress={logout} icon>
               <Left>
                 <Icon name="power" />

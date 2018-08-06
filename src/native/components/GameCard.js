@@ -6,7 +6,6 @@ import { Text, H1, Icon } from 'native-base';
 import Spacer from './Spacer';
 
 const GameCard = (props) => {
-  console.log('props', props.game)
   const {joinGame, details, game} = props;
   return(
     <View style={styles.card}>

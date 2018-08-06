@@ -8,7 +8,7 @@ import { Container, Content, Text, Button } from 'native-base';
 import Spacer from '../native/components/Spacer';
 import { Actions } from 'react-native-router-flux';
 import { getGames, joinGame } from '../actions/games';
-import { getMemberData } from '../actions/member';
+import { getMemberData, registerForPushNotifications } from '../actions/member';
 
 class GamesContainer extends Component {
   static propTypes = {
@@ -20,7 +20,9 @@ class GamesContainer extends Component {
 
   componentWillMount(){
     this.props.getGames();
-    this.props.getMemberData();
+    this.props.getMemberData().then(()=> {
+      return this.props.registerForPushNotifications();
+    });
   }
 
   createGame(){
@@ -29,7 +31,6 @@ class GamesContainer extends Component {
 
   joinGame(id){
     const {userData} = this.props;
-    console.log('userData id', userData.firstName)
     const player = `${userData.firstName}-${userData.lastName}`
     this.props.joinGame({id, userId: userData.uid, player });
   }
@@ -63,4 +64,4 @@ const mapStateToProps = state => ({
 });
 
 export {GamesContainer};
-export default connect(mapStateToProps, {getGames, getMemberData, joinGame})(GamesContainer);
+export default connect(mapStateToProps, {getGames, getMemberData, joinGame, registerForPushNotifications })(GamesContainer);
