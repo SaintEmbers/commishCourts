@@ -3,6 +3,7 @@ import { View, StyleSheet, } from 'react-native';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import _ from 'lodash';
+import {Permissions, Notifications } from 'expo';
 import { Container, Content, Text, Button } from 'native-base';
 
 import Spacer from '../native/components/Spacer';
@@ -18,45 +19,126 @@ class GamesContainer extends Component {
     getUserData: PropTypes.func,
   }
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      notification: {}
+    };
+  }
+
   componentWillMount(){
     this.props.getGames();
     this.props.getMemberData().then(()=> {
-      return this.props.registerForPushNotifications();
+      this.registerForPushNotifications();
     });
+  }
+
+  _handleNotification = (notification) => {
+    this.setState({notification: notification});
+  };
+
+  comonentDidMount(){
+    this._notificationSubscription = Notifications.addListener(this._handleNotification);
+  }
+
+  async registerForPushNotifications() {
+    const { status: existingStatus } = await Permissions.getAsync(
+      Permissions.NOTIFICATIONS
+    );
+    let finalStatus = existingStatus;
+    console.log('finalStatus', finalStatus)
+    console.log('existingStatus', existingStatus)
+    let token = await Notifications.getExpoPushTokenAsync();
+    console.log('token', token)
+    // alert(`Heres yours token ${token}`)
+    // only ask if permissions have not already been determined, because
+    // iOS won't necessarily prompt the user a second time.
+    if (existingStatus !== 'granted') {
+      console.log('ask for permissions')
+      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+      // Android remote notification permissions are granted during the app
+      // install, so this will only ask on iOS
+      console.log('ask for push')
+
+      finalStatus = status;
+    }
+    console.log('finalStatus', finalStatus)
+    // Stop here if the user did not grant permissions
+    if (finalStatus !== 'granted') {
+      alert("you need to enable permissions in settings")
+      return;
+    }
+
+    // Get the token that uniquely identifies this device
+    // let token = await Notifications.getExpoPushTokenAsync();
+    // console.log('token', token)
+    // // POST the token to your backend server from where you can retrieve it to send push notifications.
+    // const updates = {};
+    // updates['/expoToken'] = token;
+    // const UID = Firebase.auth().currentUser.uid;
+    // console.log('usid', UID)
+    // FirebaseRef.child(`users/${UID}`).update(updates)
   }
 
   createGame(){
     Actions.gameCreator();
   }
 
-  joinGame(id){
+  joinGame(gameId){
     const {userData} = this.props;
-    const player = `${userData.firstName}-${userData.lastName}`
-    this.props.joinGame({id, userId: userData.uid, player });
+    const player = {
+      name: `${userData.firstName}-${userData.lastName}`,
+      list: userData.list,
+      position: userData.position,
+      rating: userData.rating,
+    }
+    this.props.joinGame({gameId, userId: userData.uid, player });
   }
 
-  render = () => {
+  makeTeams(gameId){
+    console.log('lets make teams', gameId)
+    Actions.teamView({gameId})
+  }
+
+  render(){
     const { Layout, games, userData } = this.props;
     const {isCommish} = userData;
     const cards = [];
 
     _.forIn(games.games, (value, key) => {
-      cards.push(<Layout game={key} details={value} key={key} isCommish={isCommish} joinGame={this.joinGame.bind(this)}/>)
+      cards.push(<Layout game={key} details={value} key={key} isCommish={isCommish} joinGame={this.joinGame.bind(this)} makeTeams={this.makeTeams.bind(this)}/>)
     })
-    const button = isCommish && <Button block onPress={this.createGame}><Text>Create Game</Text></Button>;
+
+    const button = isCommish && <Button block onPress={this.createGame} style={styles.button}><Text>Create Game</Text></Button>;
     return (
-    <Container>
-      <Content padder>
-        <View>
+    <Container padder>
+      <Content style={styles.view}>
+        <View style={styles.cardsView}>
           {cards}
         </View>
-        {button}
+        <View style={{flex:1, flexDirection:'column', justifyContent:'center', alignItems: 'center'}}>
+          <View style={{flexDirection:'row'}}>
+            {button}
+          </View>
+        </View>
       </Content>
     </Container>
 
     );
   }
 }
+
+const styles = StyleSheet.create({
+  view: {
+    marginBottom: 30,
+  },
+  cardsView: {
+    marginTop: 10,
+  },
+  button: {
+    flex: 0.9,
+  }
+});
 
 const mapStateToProps = state => ({
   userData: state.member || {},

@@ -20,9 +20,30 @@ export function createGame({location, day, time}) {
   let gamesRef = FirebaseRef.child("games");
   return(dispatch) => {
     gamesRef.push({day, time, location}).then((res) => {
+      const note = {
+        note: `New game at ${location} on ${day} ${time}`
+      }
+      return addNote(note)
+    }).then((res) => {
+      console.log('add note finished')
       return getGames();
+    }).catch((err) => {
+      console.log('err', err)
     })
   }
+}
+
+export function addNote(note){
+  console.log('addNote', note)
+  if (Firebase === null) return () => new Promise(resolve => resolve());
+  let notesRef = FirebaseRef.child("notifications");
+  console.log('notes ref', notesRef);
+  notesRef.push(note).then((res) => {
+    console.log('res', {res})
+    return;
+  }).catch((err) => {
+    console.log('err', err)
+  })
 }
 
 export function joinGame({gameId, playerId, player}){
@@ -75,4 +96,52 @@ export function getReservedGames({id}){
       })
     });
   }
+}
+
+export function getPlayers({gameId}){
+  let players;
+
+  FirebaseRef.child(`games/${gameId}/player-list`).once('value', (snapshot) => {
+    players = snapshot.val();
+  });
+
+  players = Object.keys(players).map((key, idx) => {
+    return players[key];
+  })
+  return (dispatch) => {
+    return dispatch({
+      type: 'AVAILABLE_PLAYERS',
+      players,
+    })
+  }
+}
+
+export function getAllPlayers(){
+  let players;
+
+  FirebaseRef.child(`users`).once('value', (snapshot) => {
+    players = snapshot.val();
+  });
+
+  players = Object.keys(players).map((key, idx) => {
+    return players[key];
+  })
+  return (dispatch) => {
+    return dispatch({
+      type: 'ALL_PLAYERS',
+      allPlayers,
+    })
+  }
+}
+
+function loadPlayers(players, cb) {
+  Promise.all(
+    players.map(id => {
+      return FirebaseRef.child(`users/${id}`).once('value')
+      .then(snapshot => {
+        console.log('snapshot', snapshot)
+        return snapshot
+      })
+    })
+  ).then(res => cb(res));
 }

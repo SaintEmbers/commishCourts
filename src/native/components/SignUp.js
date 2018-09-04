@@ -48,15 +48,13 @@ class SignUp extends React.Component {
       .then(() => {
         this.props.login({email: this.state.email, password: this.state.password})
       }).then(() => {
-        console.log('login and register')
-        this.props.registerForPushNotifications();
+        Actions.playerEvalForm();
       }).catch(e => console.log(`Error: ${e}`));
   }
 
   render() {
     const { loading, error } = this.props;
-
-    // Loading
+    // loading
     if (loading) return <Loading />;
 
     return (

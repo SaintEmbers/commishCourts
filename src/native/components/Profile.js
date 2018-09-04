@@ -23,7 +23,14 @@ const Profile = ({ member, logout, buy }) => (
                 <Text>You have {member.credits} credits</Text>
               </View>
             </Content>
-
+            <ListItem onPress={Actions.search} icon>
+              <Left>
+                <Icon name="search"/>
+              </Left>
+              <Body>
+                <Text>Search Players</Text>
+              </Body>
+            </ListItem>
             <ListItem onPress={Actions.updateProfile} icon>
               <Left>
                 <Icon name="person-add" />

@@ -1,9 +1,9 @@
 {
   "expo": {
-    "sdkVersion": "22.0.0",
+    "sdkVersion": "29.0.0",
     "name": "Commish Courts",
     "slug": "commish-courts",
-    "icon": "src/images/player.png",
+    "icon": "",
     "privacy": "public"
   }
 }

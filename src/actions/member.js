@@ -230,6 +230,29 @@ export function buyCredits({numCredits}) {
   })
 }
 
+export function evaluationSubmit({details}){
+  const UID = Firebase.auth().currentUser.uid;
+  return dispatch => new Promise(async (resolve, reject) => {
+    return FirebaseRef.child(`users/${UID}`).update({details})
+  }).then(() =>{
+    return dispatch({
+      type: 'EVALUATION_COMPLETE'
+    })
+  })
+}
+
+export function getEvaluationDetails(){
+  const UID = Firebase.auth().currentUser.uid;
+  return dispatch => new Promise(async (resolve, reject) => {
+    const details = await FirebaseRef.child(`users/${UID}/details`).once('value')
+
+    resolve(dispatch({
+      type: 'USER_EVALUATION',
+      details,
+    }))
+  })
+}
+
 /**
   * Logout
   */
@@ -243,44 +266,4 @@ export function logout() {
   }).catch(async (err) => { await statusMessage(dispatch, 'error', err.message); throw err.message; });
 }
 
-export function registerForPushNotifications() {
-  return async(dispatch) => {
-  const { status: existingStatus } = await Permissions.getAsync(
-    Permissions.NOTIFICATIONS
-  );
-  let finalStatus = existingStatus;
-  console.log('finalStatus', finalStatus)
-  // only ask if permissions have not already been determined, because
-  // iOS won't necessarily prompt the user a second time.
-  if (existingStatus !== 'granted') {
-    // Android remote notification permissions are granted during the app
-    // install, so this will only ask on iOS
-    console.log('ask for push ')
-    const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-    console.log('status', status)
 
-    finalStatus = status;
-  }
-  console.log('finalStatus', finalStatus)
-
-  // Stop here if the user did not grant permissions
-  if (finalStatus !== 'granted') {
-    return;
-  }
-
-  // Get the token that uniquely identifies this device
-  let token = await Notifications.getExpoPushTokenAsync();
-  console.log('token', token)
-  // POST the token to your backend server from where you can retrieve it to send push notifications.
-  const updates = {};
-  updates['/expoToken'] = token;
-  const UID = Firebase.auth().currentUser.uid;
-  console.log('usid', UID)
-  FirebaseRef.child(`users/${UID}`).update(updates)
-
-  return dispatch({
-      type: 'TOKEN',
-      token,
-    });
-  }
-}

@@ -6,10 +6,11 @@ import DefaultProps from '../constants/navigation';
 import AppConfig from '../../constants/config';
 
 import GamesContainer from '../../containers/Games';
-import GameCreatorContainer from '../../containers/GameCreator';
+import GameCreator from '../../containers/GameCreator';
 
 import GameCard from '../components/GameCard';
-import GameCreatorForm from '../components/GameCreatorForm';
+
+import TeamView from '../../containers/TeamView';
 
 import SignUpContainer from '../../containers/SignUp';
 import SignUpComponent from '../components/SignUp';
@@ -30,6 +31,8 @@ import ProfileComponent from '../components/Profile';
 
 import Bible from '../components/Bible';
 
+import SearchContainer from '../../containers/Search';
+
 const Index = (
   <Stack>
     <Scene hideNavBar>
@@ -47,7 +50,9 @@ const Index = (
         {...DefaultProps.navbarProps}
       >
       <Scene key="games" component={GamesContainer} Layout={GameCard} />
-      <Scene key="gameCreator" component={GameCreatorContainer} Layout={GameCreatorForm} />
+      <Scene key="gameCreator" component={GameCreator}/>
+      <Scene key="teamView" component={TeamView}/>
+
       </Stack>
       <Stack
         key="profile"
@@ -57,7 +62,7 @@ const Index = (
       >
       <Scene key="profileHome" component={MemberContainer} Layout={ProfileComponent} />
       <Scene key="commishBible" component={Bible}/>
-
+      <Scene key="search" component={SearchContainer}/>
       <Scene
         back
         key="signUp"

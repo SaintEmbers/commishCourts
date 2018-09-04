@@ -6,9 +6,10 @@ import { Text, H1, Icon } from 'native-base';
 import Spacer from './Spacer';
 
 const GameCard = (props) => {
-  const {joinGame, details, game} = props;
+  const {joinGame, details, game, isCommish, makeTeams} = props;
   return(
     <View style={styles.card}>
+      <TouchableOpacity onPress={makeTeams.bind(null, game)}>
       <View>
         <Text style={styles.text}>{details.day}</Text>
       </View>
@@ -18,6 +19,7 @@ const GameCard = (props) => {
       <View>
         <Text style={styles.text}>{details.time}</Text>
       </View>
+      </TouchableOpacity>
       <TouchableOpacity onPress={joinGame.bind(null, game)}>
         <View>
           <Icon name="add-circle" style={styles.icon}></Icon>

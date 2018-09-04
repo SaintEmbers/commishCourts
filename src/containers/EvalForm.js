@@ -17,9 +17,11 @@ class EvalFormContainer extends Component {
     }).isRequired,
   }
 
-  componentDidMount = () => this.props.getMemberData();
+  componentDidMount(){
+    return this.props.getMemberData();
+  } 
 
-  render = () => {
+  render(){
     const { Layout, member, memberLogout, buyCredits } = this.props;
 
     return <Layout member={member} logout={memberLogout} buy={buyCredits} />;

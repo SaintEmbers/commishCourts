@@ -6,6 +6,7 @@ npm-debug.*
 # OSX
 #
 .DS_Store
+.firebaserc
 
 # Android/IntelliJ
 android/
@@ -16,3 +17,5 @@ build/
 .gradle
 local.properties
 *.iml
+
+

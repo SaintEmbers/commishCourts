@@ -19,11 +19,9 @@ class Member extends Component {
 
   componentWillMount(){
     this.props.getMemberData();
-    // this.props.registerForPushNotifications();
   }
   render = () => {
     const { Layout, member, memberLogout, buyCredits } = this.props;
-
     return <Layout member={member} logout={memberLogout} buy={buyCredits} />;
   }
 }

@@ -10,6 +10,8 @@ import Messages from './Messages';
 import Header from './Header';
 import Spacer from './Spacer';
 
+import {evaluationSubmit} from '../../actions/member';
+
 const images = {
   starFilled: require('../../images/filled-star.png'),
   starUnfilled: require('../../images/empty-star.png')
@@ -47,7 +49,7 @@ class EvalForm extends React.Component {
   }
 
   handleSubmit(){
-    this.props.onFormSubmit(this.state)
+    this.props.evaluationSubmit({details: this.state})
       .then(() => Actions.tabbar())
       .catch(e => console.log(`Error: ${e}`));
   }
