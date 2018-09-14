@@ -36,6 +36,20 @@ class EvalForm extends React.Component {
       email: (props.member && props.member.email) ? props.member.email : '',
       password: '',
       checked: true,
+      personalRating: '',
+      postRating: '',
+      ballHandlingRating: '',
+      threePointRating: '',
+      multiplePerWeek: '',
+      oncePerWeek: '',
+      infrequently: '',
+      professionalLevel: '',
+      collegeLevel: '',
+      highSchoolLevel: '',
+      leagueBall: '',
+      pickup: '',
+      recLeague: '',
+      privateGames: '',
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -49,9 +63,8 @@ class EvalForm extends React.Component {
   }
 
   handleSubmit(){
-    this.props.evaluationSubmit({details: this.state})
-      .then(() => Actions.tabbar())
-      .catch(e => console.log(`Error: ${e}`));
+    const details = this.state
+    this.props.handleSubmit(details)
   }
 
   render() {
@@ -72,7 +85,7 @@ class EvalForm extends React.Component {
               <Label>How good do you think you are?</Label>
               <Spacer size={20} />
               <Rating
-                initial={3}
+                initial={0}
                 onChange={rating => this.handleChange('personalRating', rating)}
                 selectedStar={images.starFilled}
                 unselectedStar={images.starUnfilled}

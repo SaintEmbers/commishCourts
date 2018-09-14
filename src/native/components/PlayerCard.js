@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import { Text, Content } from 'native-base';
+import { Text, Content, Icon } from 'native-base';
 import Spacer from './Spacer';
 
 class PlayerCard extends Component{
@@ -10,73 +10,94 @@ class PlayerCard extends Component{
   constructor(props) {
     super(props);
     this.state = {
-      colors: ['black', 'red', 'white'],
       currentTeam: 'black'
     }
     this.assignTeam = this.assignTeam.bind(this)
   }
 
   componentWillMount(){
-    // const idx = this.props.key;
     this.setState({currentTeam: this.props.team})
-    // switch(true){
-    //   case idx > 9:
-    //     this.setState({currentTeam: 'red'})
-    //     break;
-    //   case idx > 4:
-    //     this.setState({currentTeam: 'white'})
-    //     break;
-    // }
   }
 
-  assignTeam(){
+  assignTeam(team){
     const {name} = this.props.player;
-    const idx = this.state.colors.indexOf(this.props.team);
-    const nextIdx = idx+1;
-    const nextColor = this.state.colors[nextIdx] || this.state.colors[0];
-
-    this.setState({currentTeam: nextColor})
-    this.props.addToTeam({name, team: nextColor, previous: this.state.currentTeam})
+    this.props.addToTeam({name, team, previous: this.state.currentTeam})
+    this.setState({currentTeam: team})
   }
 
   render(){
-    const {player} = this.props;
-    return(
-      <TouchableOpacity onPress={this.assignTeam}>
-        <View style={[styles.card, {backgroundColor: this.props.team}]}>
-          <Text style={styles.text}>{player.name}</Text>
-          <Text style={styles.text}>{player.position}</Text>
-          <Text style={styles.text}>{player.list}</Text>
+    const {player, team} = this.props;
+    const fullHTML = 
+      <View style={styles.card}>
+        <View style={styles.player}>
+          <Text style={[styles.text, styles.blackTeam]}>{player.name}</Text>
+          <Text style={[styles.text, styles.blackTeam]}>{player.position}</Text>
+          <Text style={[styles.text, styles.blackTeam]}>{player.list}</Text>
+         </View>
+          <View style={styles.player}>
+          <TouchableOpacity onPress={this.assignTeam.bind(null, 'black')}>
+            <Icon name="basketball" style={styles.blackTeam}/>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={this.assignTeam.bind(null, 'white')}>
+            <Icon name="basketball" style={styles.whiteTeam}/>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={this.assignTeam.bind(null, 'red')}>
+            <Icon name="basketball" style={styles.redTeam}/>
+          </TouchableOpacity>
+          </View>
+        </View>
+
+    const teamMember =  
+      <TouchableOpacity onPress={this.assignTeam.bind(null, 'reserve')}>
+        <View style={styles.player}>
+          <Text style={[styles.text, styles.blackTeam]}>{player.name}</Text>
+          <Text style={[styles.text, styles.blackTeam]}>{player.position}</Text>
+          <Text style={[styles.text, styles.blackTeam]}>{player.list}</Text>
         </View>
       </TouchableOpacity>
-    )
-    
+
+    const markup = team === 'reserve' ? fullHTML : teamMember 
+    return markup
+
   }
 };
 
 const styles = StyleSheet.create({
  card: {
   marginBottom: 10,
+  backgroundColor: '#898989',
+ },
+ player: {
   flexDirection: 'row',
   justifyContent: 'space-around',
-  paddingTop: 20,
-  paddingBottom: 20,
+  paddingTop: 5,
+  paddingBottom: 5,
   width: '90%',
   marginLeft: 'auto',
   marginRight: 'auto',
-  borderColor: 'black',
-  borderWidth: 1,
  },
- 
  text: {
-  color: '#36454f',
+  color: 'black',
   fontWeight: '100',
   fontSize: 23,
  }, 
  icon: {
   color: '#a0d6b4',
   fontSize: 30,
- } 
+ },
+ blackTeam: {
+  color: 'black',
+ },
+ whiteTeam: {
+  color: 'white',
+
+ },
+ redTeam: {
+  color: 'red',
+ },
+ teamIcon: {
+  color: 'white',
+ }
 })
 
 PlayerCard.propTypes = {

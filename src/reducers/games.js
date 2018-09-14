@@ -3,7 +3,6 @@ import Store from '../store/games';
 export const initialState = Store;
 
 export default function gamesReducer(state = initialState, action) {
-  console.log('games players list reducers', action.players)
   switch (action.type) {
     case 'GAMES_REPLACE': {
       return {
@@ -15,6 +14,12 @@ export default function gamesReducer(state = initialState, action) {
       return{
         ...state,
         players: action.players || {},
+      };
+    }
+    case 'TEAMS_RECEIVED': {
+      return{
+        ...state,
+        teams: action.teams || {},
       };
     }
     default:

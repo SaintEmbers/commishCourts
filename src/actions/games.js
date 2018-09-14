@@ -145,3 +145,47 @@ function loadPlayers(players, cb) {
     })
   ).then(res => cb(res));
 }
+
+export function makeTeams({red, black, white, gameId}){
+  //send to Firebase and send notification with link to teams
+  return async(dispatch) => {
+    return  FirebaseRef.child(`games/${gameId}/`).update({teams: {red, black, white}}).then(() => {
+      return dispatch({
+        type: 'TEAMS_CREATED',
+      })
+    })
+  }
+}
+
+export function getTeams({gameId}){
+  let teams;
+  return (dispatch) => {
+  FirebaseRef.child(`games/${gameId}/teams`).once('value', (snapshot) => {
+     console.log('snapshot to array', snapshotToArray(snapshot));
+     return snapshot.val();
+  }).then((teams) => {
+      const processedTeams = snapshotToArray(teams);
+    console.log('teams', processedTeams);
+      return dispatch({
+        type: 'TEAMS_RECEIVED',
+        teams:processedTeams,
+      })
+    })
+  };
+}
+
+function snapshotToArray(snapshot) {
+    var returnArr = [];
+    snapshot.forEach(function(childSnapshot) {
+      var item = childSnapshot.val();
+      var key = childSnapshot.key;
+      returnArr.push({[key]: item});
+    });
+    return returnArr;
+};
+
+
+
+
+
+
