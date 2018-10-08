@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Actions } from 'react-native-router-flux';
 
 import { logout, getMemberData, buyCredits, evaluationSubmit } from '../actions/member';
 
@@ -12,15 +13,21 @@ class EvalFormContainer extends Component {
     getMemberData: PropTypes.func.isRequired,
     buyCredits: PropTypes.func.isRequired,
     member: PropTypes.shape({
-      loading: PropTypes.bool.isRequired,
+      loading: PropTypes.bool,
       error: PropTypes.string,
     }).isRequired,
   }
 
   constructor(props) {
     super(props);
-
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps){
+    if(nextProps.evalComplete && !this.props.evalComplete){
+      console.log('go to profile page')
+      Actions.profilePage();
+    }
   }
 
   componentDidMount(){
@@ -29,25 +36,25 @@ class EvalFormContainer extends Component {
 
   handleSubmit(details){
     this.props.evaluationSubmit({details})
-    .then(() => Actions.tabbar())
-    .catch(e => console.log(`Error: ${e}`));
   }
 
   render(){
-    const { Layout, member, memberLogout, buyCredits } = this.props;
-
+    const { Layout, member, memberLogout, buyCredits, evalComplete } = this.props;
     return <Layout member={member} logout={memberLogout} buy={buyCredits} handleSubmit={this.handleSubmit} />;
   }
 }
 
 const mapStateToProps = state => ({
-  member: state.member || {},
+
+  member: state.member,
+  evalComplete: state.member.evalComplete || false,
 });
 
 const mapDispatchToProps = {
   memberLogout: logout,
   getMemberData,
   buyCredits,
+  evaluationSubmit,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(EvalFormContainer);

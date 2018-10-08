@@ -2,7 +2,7 @@ import ErrorMessages from '../constants/errors';
 import statusMessage from './status';
 import { Firebase, FirebaseRef } from '../lib/firebase';
 import {Permissions, Notifications } from 'expo';
-
+import fetch from 'cross-fetch';
 /**
   * Sign Up to Firebase
   */
@@ -39,8 +39,6 @@ export function signUp(formData) {
             signedUp: Firebase.database.ServerValue.TIMESTAMP,
             lastLoggedIn: Firebase.database.ServerValue.TIMESTAMP,
             isCommish: false,
-          }).then(() => {
-            registerForPushNotifications();
           }).then(() => statusMessage(dispatch, 'loading', false).then(resolve));
         }
       }).catch(reject);
@@ -65,28 +63,50 @@ function getUserData(dispatch) {
 
   return ref.on('value', (snapshot) => {
     const userData = snapshot.val() || [];
-
     return dispatch({
-      type: 'USER_DETAILS_UPDATE',
+      type: 'USER_DETAILS',
       data: userData,
+      profile: userData.profile,
     });
   });
 }
 
 export function getMemberData() {
   if (Firebase === null) return () => new Promise(resolve => resolve());
-
+  // const storageRef = Firebase.storage().ref();
+  
   // Ensure token is up to date
   return dispatch => new Promise((resolve) => {
     Firebase.auth().onAuthStateChanged((loggedIn) => {
       if (loggedIn) {
         return resolve(getUserData(dispatch));
       }
-
       return () => new Promise(() => resolve());
     });
   });
 }
+
+export function saveMemberPhoto({image}){
+  return dispatch => new Promise(async (resolve, reject) => {
+    const response = await fetch(image);
+    const blob = await response.blob();
+    var ref = Firebase.storage().ref().child("images/my-image");
+    return ref.put(blob)
+  })
+}
+
+export function getMemberPhoto(){
+  const storageRef = Firebase.storage().ref();
+  return dispatch => new Promise(async (resolve, reject) => {
+    storageRef.child('images/my-image').getDownloadURL().then(function(url) {
+      return dispatch({
+        type: 'USER_PHOTO',
+        profilePhoto: url,
+      });
+    })
+  })
+}
+
 
 /**
   * Login to Firebase with Email/Password
@@ -222,8 +242,6 @@ export function buyCredits({numCredits}) {
 
     statusMessage(dispatch, 'success', 'Credits Added');
     const UID = Firebase.auth().currentUser.uid;
-
-    console.log('ueid', FirebaseRef.child(`users/${UID}`))
     const amount = 1; 
     
     return FirebaseRef.child(`users/${UID}`).update({credits: 2})
@@ -233,10 +251,10 @@ export function buyCredits({numCredits}) {
 export function evaluationSubmit({details}){
   const UID = Firebase.auth().currentUser.uid;
   return dispatch => new Promise(async (resolve, reject) => {
-    return FirebaseRef.child(`users/${UID}`).update({details})
-  }).then(() =>{
+    await FirebaseRef.child(`users/${UID}`).update({profile: details})
+    console.log('dispatch profile details')
     return dispatch({
-      type: 'EVALUATION_COMPLETE'
+      type: 'EVALUATION_COMPLETE',
     })
   })
 }
@@ -244,15 +262,13 @@ export function evaluationSubmit({details}){
 export function getEvaluationDetails(){
   const UID = Firebase.auth().currentUser.uid;
   return dispatch => new Promise(async (resolve, reject) => {
-    const details = await FirebaseRef.child(`users/${UID}/details`).once('value')
-
+    const details = await FirebaseRef.child(`users/${UID}/profile`).once('value')
     resolve(dispatch({
       type: 'USER_EVALUATION',
       details,
     }))
   })
 }
-
 /**
   * Logout
   */
@@ -265,5 +281,6 @@ export function logout() {
       }).catch(reject);
   }).catch(async (err) => { await statusMessage(dispatch, 'error', err.message); throw err.message; });
 }
+
 
 

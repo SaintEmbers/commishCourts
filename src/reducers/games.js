@@ -22,6 +22,12 @@ export default function gamesReducer(state = initialState, action) {
         teams: action.teams || {},
       };
     }
+    case 'ALL_PLAYERS': {
+      return {
+        ...state,
+        allPlayers: action.allPlayers || [],
+      }
+    }
     default:
       return state;
   }

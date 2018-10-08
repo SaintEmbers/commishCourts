@@ -40,16 +40,10 @@ class EvalForm extends React.Component {
       postRating: '',
       ballHandlingRating: '',
       threePointRating: '',
-      multiplePerWeek: '',
-      oncePerWeek: '',
-      infrequently: '',
-      professionalLevel: '',
-      collegeLevel: '',
-      highSchoolLevel: '',
-      leagueBall: '',
-      pickup: '',
-      recLeague: '',
-      privateGames: '',
+      frequency: '',
+      highestLevel: '',
+      adultLevel: '',
+
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -69,6 +63,7 @@ class EvalForm extends React.Component {
 
   render() {
     const { loading, error } = this.props;
+    console.log('state', this.state)
     // Loading
     if (loading) return <Loading />;
 
@@ -167,55 +162,55 @@ class EvalForm extends React.Component {
               <Label>How often do you play?</Label>
               <CheckBox
                 title='Multiple times a week'
-                checked={this.state.multiplePerWeek}
-                onPress={() => this.handleChange('multiplePerWeek', !this.state.multiplePerWeek)}
+                checked={this.state.multiplePerWeek === 'Multiple Games Per Week'}
+                onPress={() => this.handleChange('frequency', 'Multiple Games Per Week')}
                 checkedColor='black'
               />
                <CheckBox
                 title='Once a week'
-                checked={this.state.oncePerWeek}
-                onPress={() => this.handleChange('oncePerWeek', !this.state.oncePerWeek)}
+                checked={this.state.frequency === 'Once Per Week'}
+                onPress={() => this.handleChange('frequency', 'Once Per Week')}
                 checkedColor='black'
               />
               <CheckBox
                 title='Once a month'
-                checked={this.state.oncePerMonth}
-                onPress={() => this.handleChange('oncePerMonth', !this.state.oncePerMonth)}
+                checked={this.state.frequency === 'Once Per Month'}
+                onPress={() => this.handleChange('frequency', 'Once Per Month')}
                 checkedColor='black'
               />
               <CheckBox
                 title='Less than once a month'
-                checked={this.state.infrequently}
-                onPress={() => this.handleChange('infrequently', !this.state.infrequently)}
+                checked={this.state.frequency === 'Infrequently'}
+                onPress={() => this.handleChange('frequency', 'Infrequently')}
                 checkedColor='black'
                 left
               />
             </Item>
 
             <Item stackedLabel>
-              <Label>Have you played at the following levels?</Label>
-                            <CheckBox
+              <Label>What is your highest level of playing basketball?</Label>
+              <CheckBox
                 title='Professional'
-                checked={this.state.professionalLevel}
-                onPress={() => this.handleChange('professionalLevel', !this.state.professionalLevel)}
+                checked={this.state.highestLevel === 'Professional'}
+                onPress={() => this.handleChange('highestLevel','Professional')}
                 checkedColor='black'
               />
                <CheckBox
                 title='Collegiate'
-                checked={this.state.collegeLevel}
-                onPress={() => this.handleChange('collegeLevel', !this.state.collegeLevel)}
+                checked={this.state.highestLevel === 'College Level'}
+                onPress={() => this.handleChange('highestLevel', 'College')}
                 checkedColor='black'
               />
               <CheckBox
                 title='High School'
-                checked={this.state.highSchoolLevel}
-                onPress={() => this.handleChange('highSchoolLevel', !this.state.highSchoolLevel)}
+                checked={this.state.highestLevel === 'High School'}
+                onPress={() => this.handleChange('highestLevel', 'High School')}
                 checkedColor='black'
               />
               <CheckBox
                 title='League as a kid'
-                checked={this.state.leagueBall}
-                onPress={() => this.handleChange('leagueBall', !this.state.leagueBall)}
+                checked={this.state.highestLevel === 'League'}
+                onPress={() => this.handleChange('highestLevel', 'League')}
                 checkedColor='black'
                 left
               />
@@ -224,20 +219,20 @@ class EvalForm extends React.Component {
               <Label>As an adult have you played at any of the following?</Label>
               <CheckBox
                 title='Pickup games'
-                checked={this.state.pickup}
-                onPress={() => this.handleChange('pickup', !this.state.pickup)}
+                checked={this.state.adultLevel === 'Pickup'}
+                onPress={() => this.handleChange('adultLevel', 'Pickup')}
                 checkedColor='black'
               />
                <CheckBox
                 title='Organized rec leagues'
-                checked={this.state.recLeague}
-                onPress={() => this.handleChange('recLeague', !this.state.recLeague)}
+                checked={this.state.adultLevel === 'recLeague'}
+                onPress={() => this.handleChange('adultLevel', 'Rec League')}
                 checkedColor='black'
               />
               <CheckBox
                 title='Private group games'
-                checked={this.state.privateGames}
-                onPress={() => this.handleChange('privateGames', !this.state.privateGames)}
+                checked={this.state.adultLevel === 'privateGames'}
+                onPress={() => this.handleChange('adultLevel', 'Private Games')}
                 checkedColor='black'
               />
             </Item>

@@ -25,7 +25,6 @@ export function createGame({location, day, time}) {
       }
       return addNote(note)
     }).then((res) => {
-      console.log('add note finished')
       return getGames();
     }).catch((err) => {
       console.log('err', err)
@@ -34,7 +33,6 @@ export function createGame({location, day, time}) {
 }
 
 export function addNote(note){
-  console.log('addNote', note)
   if (Firebase === null) return () => new Promise(resolve => resolve());
   let notesRef = FirebaseRef.child("notifications");
   console.log('notes ref', notesRef);
@@ -118,19 +116,20 @@ export function getPlayers({gameId}){
 
 export function getAllPlayers(){
   let players;
-
-  FirebaseRef.child(`users`).once('value', (snapshot) => {
-    players = snapshot.val();
+  return async(dispatch) => {
+  let players = await FirebaseRef.child(`users`).once('value', (snapshot) => {
+    return snapshot.val();
   });
-
-  players = Object.keys(players).map((key, idx) => {
-    return players[key];
+  console.log('players.val', players.val());
+  players = Object.keys(players.val()).map((key, idx) => {
+    const playersObj = players.val();
+    return playersObj[key];
   })
-  return (dispatch) => {
-    return dispatch({
-      type: 'ALL_PLAYERS',
-      allPlayers,
-    })
+  // console.log('players', players)
+  return dispatch({
+    type: 'ALL_PLAYERS',
+    allPlayers: players,
+  })
   }
 }
 
@@ -161,11 +160,9 @@ export function getTeams({gameId}){
   let teams;
   return (dispatch) => {
   FirebaseRef.child(`games/${gameId}/teams`).once('value', (snapshot) => {
-     console.log('snapshot to array', snapshotToArray(snapshot));
      return snapshot.val();
   }).then((teams) => {
       const processedTeams = snapshotToArray(teams);
-    console.log('teams', processedTeams);
       return dispatch({
         type: 'TEAMS_RECEIVED',
         teams:processedTeams,

@@ -46,10 +46,7 @@ class GamesContainer extends Component {
       Permissions.NOTIFICATIONS
     );
     let finalStatus = existingStatus;
-    console.log('finalStatus', finalStatus)
-    console.log('existingStatus', existingStatus)
     let token = await Notifications.getExpoPushTokenAsync();
-    console.log('token', token)
     // alert(`Heres yours token ${token}`)
     // only ask if permissions have not already been determined, because
     // iOS won't necessarily prompt the user a second time.
@@ -96,7 +93,6 @@ class GamesContainer extends Component {
   }
 
   makeTeams(gameId){
-    console.log('lets make teams', gameId)
     Actions.teamView({gameId})
   }
 

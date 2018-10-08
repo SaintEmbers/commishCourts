@@ -10,7 +10,7 @@ class Member extends Component {
     memberLogout: PropTypes.func.isRequired,
     getMemberData: PropTypes.func.isRequired,
     member: PropTypes.shape({
-      loading: PropTypes.bool.isRequired,
+      loading: PropTypes.bool,
       error: PropTypes.string,
     }).isRequired,
   }

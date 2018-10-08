@@ -12,7 +12,7 @@ class Member extends Component {
     getMemberData: PropTypes.func.isRequired,
     buyCredits: PropTypes.func.isRequired,
     member: PropTypes.shape({
-      loading: PropTypes.bool.isRequired,
+      // loading: PropTypes.bool.isRequired,
       error: PropTypes.string,
     }).isRequired,
   }

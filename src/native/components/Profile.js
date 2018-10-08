@@ -31,12 +31,12 @@ const Profile = ({ member, logout, buy }) => (
                 <Text>Search Players</Text>
               </Body>
             </ListItem>
-            <ListItem onPress={Actions.updateProfile} icon>
+            <ListItem onPress={Actions.profilePage} icon>
               <Left>
                 <Icon name="person-add" />
               </Left>
               <Body>
-                <Text>Update My Profile</Text>
+                <Text>My Profile</Text>
               </Body>
             </ListItem>
             <ListItem onPress={buy} icon>

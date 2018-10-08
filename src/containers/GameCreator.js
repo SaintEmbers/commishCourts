@@ -66,7 +66,6 @@ static propTypes = {
   }
 
   showCalendar = () => {
-    console.log('show calendar')
     this.setState({isDatePickerVisible: true})
   }
 
