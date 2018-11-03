@@ -252,7 +252,6 @@ export function evaluationSubmit({details}){
   const UID = Firebase.auth().currentUser.uid;
   return dispatch => new Promise(async (resolve, reject) => {
     await FirebaseRef.child(`users/${UID}`).update({profile: details})
-    console.log('dispatch profile details')
     return dispatch({
       type: 'EVALUATION_COMPLETE',
     })
@@ -282,5 +281,38 @@ export function logout() {
   }).catch(async (err) => { await statusMessage(dispatch, 'error', err.message); throw err.message; });
 }
 
+export function addPlayerNote(note, uid){
+  if (Firebase === null) return () => new Promise(resolve => resolve());
+  let notesRef = FirebaseRef.child(`users/${uid}/profile/notes`);
+  return dispatch => new Promise((resolve, reject) => {
 
+    notesRef.push(note).then((res) => {
+      console.log('res', {res})
+      return dispatch({
+        type: 'USER_NOTE',
+      })
+    }).catch((err) => {
+      console.log('err', err)
+    })
+  });
+}
 
+export function resetNote(note){
+  return dispatch => new Promise((resolve, reject) => {
+    return dispatch({
+      type: 'USER_NOTE_ADDED',
+    })
+  }).catch((err) => {
+    console.log('err', err)
+  })
+}
+
+export function updateList({list, uid}){
+  const profileRef =  FirebaseRef.child(`users/${uid}/profile/list`);
+  return dispatch => new Promise(async (resolve, reject) => {
+    await profileRef.update({list})
+    resolve(dispatch({
+      type: 'LIST_UPDATE_SUCCESS',
+    }))
+  })
+}

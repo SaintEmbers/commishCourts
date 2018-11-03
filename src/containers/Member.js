@@ -30,7 +30,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   memberLogout: logout,
   getMemberData,
-  
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Member);

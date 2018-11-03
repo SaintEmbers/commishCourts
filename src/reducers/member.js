@@ -64,6 +64,18 @@ export default function userReducer(state = initialState, action) {
         evalComplete: true,
       }
     }
+    case 'USER_NOTE':{
+      return{
+        ...state,
+        noteAdded: true,
+      }
+    }
+    case 'USER_NOTE_ADDED':{
+      return{
+        ...state,
+        noteAdded: false,
+      }
+    }
     default:
       return state;
   }

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { Container, Content, Text, Form, Item, Label, Input, Button } from 'native-base';
 import { Actions } from 'react-native-router-flux';
-import { registerForPushNotifications } from '../../actions/member';
+import { registerForPushNotifications } from '../actions/member';
 import Loading from './Loading';
 import Messages from './Messages';
 import Header from './Header';
@@ -46,7 +46,7 @@ class SignUp extends React.Component {
   handleSubmit = () => {
     this.props.signUp(this.state)
       .then(() => {
-        this.props.login({email: this.state.email, password: this.state.password})
+        this.props.login({ email: this.state.email, password: this.state.password });
       }).then(() => {
         Actions.playerEvalForm();
       }).catch(e => console.log(`Error: ${e}`));
@@ -111,5 +111,5 @@ class SignUp extends React.Component {
 
 const mapStateToProps = state => ({});
 
-export {SignUp};
-export default connect(mapStateToProps, {registerForPushNotifications})(SignUp);
+export { SignUp };
+export default connect(mapStateToProps, { registerForPushNotifications })(SignUp);

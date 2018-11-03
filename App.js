@@ -1,5 +1,5 @@
 import React from 'react';
-import Root from './src/native/index';
+import Root from './src/index';
 import configureStore from './src/store/index';
 
 const { persistor, store } = configureStore();

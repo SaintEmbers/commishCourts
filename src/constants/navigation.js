@@ -1,4 +1,4 @@
-import Colors from '../../../native-base-theme/variables/commonColor';
+import Colors from '../../native-base-theme/variables/commonColor';
 
 export default {
   navbarProps: {
@@ -18,7 +18,7 @@ export default {
     swipeEnabled: false,
     activeBackgroundColor: 'rgba(255,0,0,0.1)',
     inactiveBackgroundColor: Colors.brandPrimary,
-    tabBarStyle: { backgroundColor:'rgba(255,0,0,1)' },
+    tabBarStyle: { backgroundColor: 'rgba(255,0,0,1)' },
   },
 
   icons: {

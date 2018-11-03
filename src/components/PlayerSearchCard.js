@@ -52,7 +52,6 @@ const styles = StyleSheet.create({
   backgroundColor: 'black',
   paddingTop: 20,
   paddingBottom: 20,
-  color: 'white'
  },
  player: {
   flexDirection: 'row',

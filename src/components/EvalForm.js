@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Rating from 'react-native-rating';
-import { CheckBox } from 'react-native-elements'
+import { CheckBox } from 'react-native-elements';
 import { Easing } from 'react-native';
 import { Container, Content, Form, Item, Label, Input, Text, Button } from 'native-base';
 import { Actions } from 'react-native-router-flux';
@@ -10,12 +10,12 @@ import Messages from './Messages';
 import Header from './Header';
 import Spacer from './Spacer';
 
-import {evaluationSubmit} from '../../actions/member';
+import { evaluationSubmit } from '../actions/member';
 
 const images = {
-  starFilled: require('../../images/filled-star.png'),
-  starUnfilled: require('../../images/empty-star.png')
-}
+  starFilled: require('../images/filled-star.png'),
+  starUnfilled: require('../images/empty-star.png'),
+};
 
 class EvalForm extends React.Component {
   static propTypes = {
@@ -43,28 +43,27 @@ class EvalForm extends React.Component {
       frequency: '',
       highestLevel: '',
       adultLevel: '',
+      list: 'nube',
 
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange(name, val){
+  handleChange(name, val) {
     this.setState({
       ...this.state,
       [name]: val,
     });
   }
 
-  handleSubmit(){
-    const details = this.state
-    this.props.handleSubmit(details)
+  handleSubmit() {
+    const details = this.state;
+    this.props.handleSubmit(details);
   }
 
   render() {
     const { loading, error } = this.props;
-    console.log('state', this.state)
-    // Loading
     if (loading) return <Loading />;
 
     return (
@@ -86,13 +85,13 @@ class EvalForm extends React.Component {
                 unselectedStar={images.starUnfilled}
                 config={{
                   easing: Easing.inOut(Easing.ease),
-                  duration: 350
+                  duration: 350,
                 }}
                 stagger={80}
                 maxScale={1.4}
                 starStyle={{
                   width: 40,
-                  height: 40
+                  height: 40,
                 }}
               />
               <Spacer size={20} />
@@ -106,13 +105,13 @@ class EvalForm extends React.Component {
                 unselectedStar={images.starUnfilled}
                 config={{
                   easing: Easing.inOut(Easing.ease),
-                  duration: 350
+                  duration: 350,
                 }}
                 stagger={80}
                 maxScale={1.4}
                 starStyle={{
                   width: 40,
-                  height: 40
+                  height: 40,
                 }}
               />
               <Spacer size={20} />
@@ -127,13 +126,13 @@ class EvalForm extends React.Component {
                 unselectedStar={images.starUnfilled}
                 config={{
                   easing: Easing.inOut(Easing.ease),
-                  duration: 350
+                  duration: 350,
                 }}
                 stagger={80}
                 maxScale={1.4}
                 starStyle={{
                   width: 40,
-                  height: 40
+                  height: 40,
                 }}
               />
               <Spacer size={20} />
@@ -147,13 +146,13 @@ class EvalForm extends React.Component {
                 unselectedStar={images.starUnfilled}
                 config={{
                   easing: Easing.inOut(Easing.ease),
-                  duration: 350
+                  duration: 350,
                 }}
                 stagger={80}
                 maxScale={1.4}
                 starStyle={{
                   width: 40,
-                  height: 40
+                  height: 40,
                 }}
               />
               <Spacer size={20} />
@@ -161,28 +160,28 @@ class EvalForm extends React.Component {
             <Item stackedLabel>
               <Label>How often do you play?</Label>
               <CheckBox
-                title='Multiple times a week'
+                title="Multiple times a week"
                 checked={this.state.multiplePerWeek === 'Multiple Games Per Week'}
                 onPress={() => this.handleChange('frequency', 'Multiple Games Per Week')}
-                checkedColor='black'
+                checkedColor="black"
               />
-               <CheckBox
-                title='Once a week'
+              <CheckBox
+                title="Once a week"
                 checked={this.state.frequency === 'Once Per Week'}
                 onPress={() => this.handleChange('frequency', 'Once Per Week')}
-                checkedColor='black'
+                checkedColor="black"
               />
               <CheckBox
-                title='Once a month'
+                title="Once a month"
                 checked={this.state.frequency === 'Once Per Month'}
                 onPress={() => this.handleChange('frequency', 'Once Per Month')}
-                checkedColor='black'
+                checkedColor="black"
               />
               <CheckBox
-                title='Less than once a month'
+                title="Less than once a month"
                 checked={this.state.frequency === 'Infrequently'}
                 onPress={() => this.handleChange('frequency', 'Infrequently')}
-                checkedColor='black'
+                checkedColor="black"
                 left
               />
             </Item>
@@ -190,50 +189,50 @@ class EvalForm extends React.Component {
             <Item stackedLabel>
               <Label>What is your highest level of playing basketball?</Label>
               <CheckBox
-                title='Professional'
+                title="Professional"
                 checked={this.state.highestLevel === 'Professional'}
-                onPress={() => this.handleChange('highestLevel','Professional')}
-                checkedColor='black'
+                onPress={() => this.handleChange('highestLevel', 'Professional')}
+                checkedColor="black"
               />
-               <CheckBox
-                title='Collegiate'
+              <CheckBox
+                title="Collegiate"
                 checked={this.state.highestLevel === 'College Level'}
                 onPress={() => this.handleChange('highestLevel', 'College')}
-                checkedColor='black'
+                checkedColor="black"
               />
               <CheckBox
-                title='High School'
+                title="High School"
                 checked={this.state.highestLevel === 'High School'}
                 onPress={() => this.handleChange('highestLevel', 'High School')}
-                checkedColor='black'
+                checkedColor="black"
               />
               <CheckBox
-                title='League as a kid'
+                title="League as a kid"
                 checked={this.state.highestLevel === 'League'}
                 onPress={() => this.handleChange('highestLevel', 'League')}
-                checkedColor='black'
+                checkedColor="black"
                 left
               />
             </Item>
             <Item stackedLabel>
               <Label>As an adult have you played at any of the following?</Label>
               <CheckBox
-                title='Pickup games'
+                title="Pickup games"
                 checked={this.state.adultLevel === 'Pickup'}
                 onPress={() => this.handleChange('adultLevel', 'Pickup')}
-                checkedColor='black'
-              />
-               <CheckBox
-                title='Organized rec leagues'
-                checked={this.state.adultLevel === 'recLeague'}
-                onPress={() => this.handleChange('adultLevel', 'Rec League')}
-                checkedColor='black'
+                checkedColor="black"
               />
               <CheckBox
-                title='Private group games'
+                title="Organized rec leagues"
+                checked={this.state.adultLevel === 'recLeague'}
+                onPress={() => this.handleChange('adultLevel', 'Rec League')}
+                checkedColor="black"
+              />
+              <CheckBox
+                title="Private group games"
                 checked={this.state.adultLevel === 'privateGames'}
                 onPress={() => this.handleChange('adultLevel', 'Private Games')}
-                checkedColor='black'
+                checkedColor="black"
               />
             </Item>
             <Spacer size={20} />

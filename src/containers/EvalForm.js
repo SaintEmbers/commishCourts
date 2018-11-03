@@ -12,6 +12,8 @@ class EvalFormContainer extends Component {
     memberLogout: PropTypes.func.isRequired,
     getMemberData: PropTypes.func.isRequired,
     buyCredits: PropTypes.func.isRequired,
+    evalComplete: PropTypes.bool.isRequired,
+    evaluationSubmit: PropTypes.func.isRequired,
     member: PropTypes.shape({
       loading: PropTypes.bool,
       error: PropTypes.string,
@@ -23,29 +25,35 @@ class EvalFormContainer extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  componentWillReceiveProps(nextProps){
-    if(nextProps.evalComplete && !this.props.evalComplete){
-      console.log('go to profile page')
+
+  componentDidMount() {
+    return this.props.getMemberData();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.evalComplete && !this.props.evalComplete) {
       Actions.profilePage();
     }
   }
 
-  componentDidMount(){
-    return this.props.getMemberData();
-  } 
-
-  handleSubmit(details){
-    this.props.evaluationSubmit({details})
+  handleSubmit(details) {
+    this.props.evaluationSubmit({ details });
   }
 
-  render(){
-    const { Layout, member, memberLogout, buyCredits, evalComplete } = this.props;
-    return <Layout member={member} logout={memberLogout} buy={buyCredits} handleSubmit={this.handleSubmit} />;
+  render() {
+    const {
+      Layout, member, memberLogout,
+    } = this.props;
+    return (<Layout
+      member={member}
+      logout={memberLogout}
+      buy={this.props.buyCredits}
+      handleSubmit={this.handleSubmit}
+    />);
   }
 }
 
 const mapStateToProps = state => ({
-
   member: state.member,
   evalComplete: state.member.evalComplete || false,
 });

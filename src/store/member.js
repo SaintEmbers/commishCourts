@@ -3,4 +3,5 @@ export default {
   error: null,
   evalComplete: false,
   profilePhoto: '',
+  noteAdded: false,
 };
