@@ -19,6 +19,7 @@ export default function userReducer(state = initialState, action) {
     }
     case 'USER_DETAILS': {
       if (action.data) {
+        console.log('action data', action.data);
         return {
           ...state,
           loading: false,
@@ -28,7 +29,8 @@ export default function userReducer(state = initialState, action) {
           signedUp: action.data.signedUp,
           role: action.data.role,
           isCommish: action.data.isCommish,
-          profile: action.profile,
+          profile: action.data.profile,
+          credits: action.data.credits,
         };
       }
       return initialState;
@@ -36,14 +38,14 @@ export default function userReducer(state = initialState, action) {
     case 'ALL_USERS': {
       return {
         ...state,
-        allPlayers: actions.users
-      }
+        allPlayers: actions.users,
+      };
     }
     case 'USER_PHOTO': {
       return {
         ...state,
         profilePhoto: action.profilePhoto,
-      }
+      };
     }
     case 'USER_ERROR': {
       if (action.data) {
@@ -58,23 +60,23 @@ export default function userReducer(state = initialState, action) {
     case 'USER_RESET': {
       return initialState;
     }
-    case 'EVALUATION_COMPLETE':{
+    case 'EVALUATION_COMPLETE': {
       return {
         ...state,
         evalComplete: true,
-      }
+      };
     }
-    case 'USER_NOTE':{
-      return{
+    case 'USER_NOTE': {
+      return {
         ...state,
         noteAdded: true,
-      }
+      };
     }
-    case 'USER_NOTE_ADDED':{
-      return{
+    case 'USER_NOTE_ADDED': {
+      return {
         ...state,
         noteAdded: false,
-      }
+      };
     }
     default:
       return state;

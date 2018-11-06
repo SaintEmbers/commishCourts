@@ -42,14 +42,16 @@ const Index = (
         type="replace"
         showLabel={false}
         {...DefaultProps.tabProps}
+
       >
         <Stack
           key="profile"
           title="PROFILE"
           icon={() => <Icon name="contact" {...DefaultProps.icons} />}
           {...DefaultProps.navbarProps}
+          navigationBarStyle={{ height: 0 }}
         >
-          <Scene key="profileHome" component={MemberContainer} navigationBarStyle={{ backgroundColor: 'black', marginTop: -40 }} titleStyle={{ color: 'white', fontSize: 25 }} Layout={ProfileComponent} />
+          <Scene key="profileHome" component={MemberContainer} navigationBarStyle={{ backgroundColor: 'white', height: 0, display: 'none' }} titleStyle={{ color: 'white', fontSize: 25 }} Layout={ProfileComponent} />
           <Scene key="profilePage" navigationBarStyle={{ marginTop: -40 }} component={ProfileDetailsContainer} />
           <Scene key="commishBible" component={Bible} navigationBarStyle={{ marginTop: -40 }} />
           <Scene key="search" navigationBarStyle={{ marginTop: -40 }} component={SearchContainer} />

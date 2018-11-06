@@ -60,7 +60,7 @@ class ProfileDetailsContainer extends Component {
     } = profile;
     const note = (<TextInput
       style={{
- height: 300, borderColor: 'gray', borderWidth: 1, fontSize: 30, padding: 20, paddingTop: 20,
+ height: 300, borderColor: 'gray', borderWidth: 1, fontSize: 30, padding: 20, paddingTop: 20, color: 'white',
 }}
       onChangeText={(text) => { this.setState({ text }); }}
       value={this.state.text}
@@ -91,7 +91,7 @@ class ProfileDetailsContainer extends Component {
         </Button>;
        </View>);
     return (
-      <Container>
+      <Container style={{ backgroundColor: 'black' }}>
         <Content padder>
           <View style={{
  flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 0,
