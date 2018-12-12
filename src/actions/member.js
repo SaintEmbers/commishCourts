@@ -1,7 +1,7 @@
 import ErrorMessages from '../constants/errors';
 import statusMessage from './status';
 import { Firebase, FirebaseRef } from '../lib/firebase';
-import {Permissions, Notifications } from 'expo';
+import { Permissions, Notifications } from 'expo';
 import fetch from 'cross-fetch';
 /**
   * Sign Up to Firebase
@@ -41,7 +41,12 @@ export function signUp(formData) {
             isCommish: false,
           }).then(() => statusMessage(dispatch, 'loading', false).then(resolve));
         }
-      }).catch(reject);
+      })
+      .then(() => {
+        const userId = Firebase.auth().currentUser.uid;
+        const stripeRef = FirebaseRef.child(`/stripe_customers/${userId}/customer_id`);
+      })
+      .catch(reject);
   }).catch(async (err) => { await statusMessage(dispatch, 'error', err.message); throw err.message; });
 }
 
@@ -74,7 +79,7 @@ function getUserData(dispatch) {
 export function getMemberData() {
   if (Firebase === null) return () => new Promise(resolve => resolve());
   // const storageRef = Firebase.storage().ref();
-  
+
   // Ensure token is up to date
   return dispatch => new Promise((resolve) => {
     Firebase.auth().onAuthStateChanged((loggedIn) => {
@@ -86,25 +91,23 @@ export function getMemberData() {
   });
 }
 
-export function saveMemberPhoto({image}){
+export function saveMemberPhoto({ image }) {
   return dispatch => new Promise(async (resolve, reject) => {
     const response = await fetch(image);
     const blob = await response.blob();
-    var ref = Firebase.storage().ref().child("images/my-image");
-    return ref.put(blob)
-  })
+    const ref = Firebase.storage().ref().child('images/my-image');
+    return ref.put(blob);
+  });
 }
 
-export function getMemberPhoto(){
+export function getMemberPhoto() {
   const storageRef = Firebase.storage().ref();
   return dispatch => new Promise(async (resolve, reject) => {
-    storageRef.child('images/my-image').getDownloadURL().then(function(url) {
-      return dispatch({
-        type: 'USER_PHOTO',
-        profilePhoto: url,
-      });
-    })
-  })
+    storageRef.child('images/my-image').getDownloadURL().then(url => dispatch({
+      type: 'USER_PHOTO',
+      profilePhoto: url,
+    }));
+  });
 }
 
 
@@ -236,37 +239,35 @@ export function updateProfile(formData) {
   * Buy Credits
   */
 
-export function buyCredits({numCredits}) {
-
+export function buyCredits({ numCredits }) {
   return dispatch => new Promise(async (resolve, reject) => {
-
     statusMessage(dispatch, 'success', 'Credits Added');
     const UID = Firebase.auth().currentUser.uid;
-    const amount = 1; 
-    
-    return FirebaseRef.child(`users/${UID}`).update({credits: 2})
-  })
+    const amount = 1;
+
+    return FirebaseRef.child(`users/${UID}`).update({ credits: 2 });
+  });
 }
 
-export function evaluationSubmit({details}){
+export function evaluationSubmit({ details }) {
   const UID = Firebase.auth().currentUser.uid;
   return dispatch => new Promise(async (resolve, reject) => {
-    await FirebaseRef.child(`users/${UID}`).update({profile: details})
+    await FirebaseRef.child(`users/${UID}`).update({ profile: details });
     return dispatch({
       type: 'EVALUATION_COMPLETE',
-    })
-  })
+    });
+  });
 }
 
-export function getEvaluationDetails(){
+export function getEvaluationDetails() {
   const UID = Firebase.auth().currentUser.uid;
   return dispatch => new Promise(async (resolve, reject) => {
-    const details = await FirebaseRef.child(`users/${UID}/profile`).once('value')
+    const details = await FirebaseRef.child(`users/${UID}/profile`).once('value');
     resolve(dispatch({
       type: 'USER_EVALUATION',
       details,
-    }))
-  })
+    }));
+  });
 }
 /**
   * Logout
@@ -281,38 +282,77 @@ export function logout() {
   }).catch(async (err) => { await statusMessage(dispatch, 'error', err.message); throw err.message; });
 }
 
-export function addPlayerNote(note, uid){
+export function addPlayerNote(note, uid) {
   if (Firebase === null) return () => new Promise(resolve => resolve());
-  let notesRef = FirebaseRef.child(`users/${uid}/profile/notes`);
+  const notesRef = FirebaseRef.child(`users/${uid}/profile/notes`);
   return dispatch => new Promise((resolve, reject) => {
-
     notesRef.push(note).then((res) => {
-      console.log('res', {res})
+      console.log('res', { res });
       return dispatch({
         type: 'USER_NOTE',
-      })
+      });
     }).catch((err) => {
-      console.log('err', err)
-    })
+      console.log('err', err);
+    });
   });
 }
 
-export function resetNote(note){
-  return dispatch => new Promise((resolve, reject) => {
-    return dispatch({
-      type: 'USER_NOTE_ADDED',
-    })
-  }).catch((err) => {
-    console.log('err', err)
-  })
+export function resetNote(note) {
+  return dispatch => new Promise((resolve, reject) => dispatch({
+    type: 'USER_NOTE_ADDED',
+  })).catch((err) => {
+    console.log('err', err);
+  });
 }
 
-export function updateList({list, uid}){
-  const profileRef =  FirebaseRef.child(`users/${uid}/profile/list`);
+export function updateList({ list, uid }) {
+  const profileRef = FirebaseRef.child(`users/${uid}/profile/list`);
   return dispatch => new Promise(async (resolve, reject) => {
-    await profileRef.update({list})
+    await profileRef.update({ list });
     resolve(dispatch({
       type: 'LIST_UPDATE_SUCCESS',
-    }))
-  })
+    }));
+  });
+}
+
+export function addPaymentSource({ token, type }) {
+  const UID = Firebase.auth().currentUser.uid;
+  const stripeRef = FirebaseRef.child(`/stripe_customers/${UID}/sources/${type}`);
+
+  return dispatch => new Promise(async (resolve, reject) => {
+    await stripeRef.push({ token });
+
+    resolve(dispatch({
+      type: 'UPDATED_TOKEN',
+    }));
+  });
+}
+
+
+export function makePayment({ amount }) {
+  const UID = Firebase.auth().currentUser.uid;
+  const stripeRef = FirebaseRef.child(`/stripe_customers/${UID}/charges/`);
+  const charge = amount * 500;
+  console.log('charge', { charge, stripeRef });
+  return dispatch => new Promise(async (resolve, reject) => {
+    await stripeRef.push({ charge });
+    resolve(dispatch({
+      type: 'SUCCESSFUL_CHARGE',
+    }));
+  });
+}
+
+export function checkPaymentSource() {
+  const UID = Firebase.auth().currentUser.uid;
+  return dispatch => new Promise(async (resolve, reject) => {
+    const stripeRef = await FirebaseRef.child(`/stripe_customers/${UID}/sources/`).once('value');
+    console.log('stripe_ref', stripeRef.val() != null);
+
+    const hasPaymentMethod = stripeRef.val() != null;
+    console.log('hasPaymentMethod', hasPaymentMethod);
+    resolve(dispatch({
+      type: 'STORED_CARD',
+      hasPaymentMethod,
+    }));
+  });
 }

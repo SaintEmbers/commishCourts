@@ -28,7 +28,7 @@ import ProfileDetailsContainer from '../containers/ProfileDetails';
 
 import MemberContainer from '../containers/Member';
 import ProfileComponent from '../components/Profile';
-
+import PaymentsContainer from '../containers/Payments';
 import Bible from '../components/Bible';
 
 import SearchContainer from '../containers/Search';
@@ -55,6 +55,7 @@ const Index = (
           <Scene key="profilePage" navigationBarStyle={{ marginTop: -40 }} component={ProfileDetailsContainer} />
           <Scene key="commishBible" component={Bible} navigationBarStyle={{ marginTop: -40 }} />
           <Scene key="search" navigationBarStyle={{ marginTop: -40 }} component={SearchContainer} />
+          <Scene key="applePay" navigationBarStyle={{ marginTop: -40 }} component={PaymentsContainer} />
           <Scene
             back
             key="signUp"

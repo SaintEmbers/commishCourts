@@ -78,6 +78,12 @@ export default function userReducer(state = initialState, action) {
         noteAdded: false,
       };
     }
+    case 'STORED_CARD': {
+      return {
+        ...state,
+        hasPaymentMethod: action.hasPaymentMethod,
+      };
+    }
     default:
       return state;
   }
